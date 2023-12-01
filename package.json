@@ -6,7 +6,6 @@
     "build": "tsc && vite build",
     "serve": "vite preview --port 3000",
     "lint": "eslint . --ext .ts,.tsx,.js",
-    "prepare": "husky install",
     "test": "vitest"
   },
   "dependencies": {
