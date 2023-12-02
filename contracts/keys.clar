@@ -25,6 +25,8 @@
 (define-constant err-cannot-sell-last-share (err u502))
 ;; Insufficient shares
 (define-constant err-insufficient-shares (err u503))
+;; Generic invalid value
+(define-constant err-invalid-value (err u504))
 
 ;; data vars
 ;;
@@ -45,6 +47,7 @@
   (begin 
   ;; Check if the caller is the contractOwner
   (asserts! (is-eq contract-owner tx-sender) err-unauthorised)
+  (asserts! (> feePercent u0) err-invalid-value)
   ;; Update the protocolFeePercent value
   (ok (var-set protocolFeePercent feePercent))
   )
@@ -56,6 +59,7 @@
   (begin 
   ;; Check if the caller is the contractOwner
   (asserts! (is-eq contract-owner tx-sender) err-unauthorised)
+  (asserts! (> feePercent u0) err-invalid-value)
   ;; Update the subjectFeePercent value
   (ok (var-set subjectFeePercent feePercent))
   )
@@ -67,6 +71,7 @@
   (begin 
   ;; Check if the caller is the contractOwner
   (asserts! (is-eq contract-owner tx-sender) err-unauthorised)
+
   ;; Update the protocolFeePercent value
   (ok (var-set protocolFeeDestination destination))
   )

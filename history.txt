@@ -1,0 +1,2 @@
+#V2
+(contract-call? .keys set-protocol-fee-percent u5)

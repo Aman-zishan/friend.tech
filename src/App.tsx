@@ -42,7 +42,7 @@ function App(): ReactElement {
     },
     onFinish: (data: FinishedAuthData) => {
       // Handle successful authentication here
-      let userData = data.userSession.loadUserData();
+      const userData = data.userSession.loadUserData();
       setAddress(userData.profile.stxAddress.mainnet); // or .testnet for testnet
     },
     onCancel: () => {
