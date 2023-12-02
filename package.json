@@ -6,7 +6,7 @@
     "build": "tsc && vite build",
     "serve": "vite preview --port 3000",
     "lint": "eslint . --ext .ts,.tsx,.js",
-    "test": "vitest"
+    "test": "vitest run -- --manifest-path ./Clarinet.toml"
   },
   "dependencies": {
     "@hirosystems/clarinet-sdk": "^1.1.0",
