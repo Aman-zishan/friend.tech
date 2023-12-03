@@ -11,12 +11,15 @@ import Explore from './pages/Explore';
 import Chats from './pages/Chats';
 import Login from './pages/Login';
 import BuyFirstKey from './pages/BuyFirstKey';
+import { StacksMocknet } from 'micro-stacks/network';
+
+const devnet = new StacksMocknet({ coreApiUrl: 'http://localhost:3999' });
 
 createRoot(document.getElementById('root') as HTMLElement).render(
   <MicroStacks.ClientProvider
     appName="sFriend.tech"
     appIconUrl="APP_ICON.png"
-    network="testnet"
+    network={devnet}
   >
     <React.StrictMode>
       <BrowserRouter>

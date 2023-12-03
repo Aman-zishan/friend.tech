@@ -22,6 +22,7 @@ import { ArrowRight } from 'lucide-react';
 import { truncateAddress, fetchSTXBalance } from '../lib/utils';
 import { SVGComponent } from './stacksSvg';
 import useConnect from '@/lib/hooks/useConnect';
+import { useAuth } from '@micro-stacks/react';
 
 function ConnectWallet(): ReactElement {
   const {
@@ -32,61 +33,55 @@ function ConnectWallet(): ReactElement {
     userSession,
     balance
   } = useConnect();
-  const [address, setAddress] = useState('');
 
-  const [isSignatureVerified, setIsSignatureVerified] = useState(false);
-  const [hasFetchedReadOnly, setHasFetchedReadOnly] = useState(false);
+  // const fetchReadOnly = async (senderAddress: string) => {
+  //   // Define your contract details here
+  //   const contractAddress = 'ST000000000000000000002AMW42H';
+  //   const contractName = 'pox-3';
+  //   const functionName = 'is-pox-active';
 
-  const message = 'Hello, Hiro Hacks!';
+  //   const functionArgs = [uintCV(10)];
 
-  const fetchReadOnly = async (senderAddress: string) => {
-    // Define your contract details here
-    const contractAddress = 'ST000000000000000000002AMW42H';
-    const contractName = 'pox-3';
-    const functionName = 'is-pox-active';
+  //   try {
+  //     const result = await callReadOnlyFunction({
+  //       network,
+  //       contractAddress,
+  //       contractName,
+  //       functionName,
+  //       functionArgs,
+  //       senderAddress
+  //     });
+  //     setHasFetchedReadOnly(true);
+  //     console.log(cvToValue(result));
+  //   } catch (error) {
+  //     console.error('Error fetching read-only function:', error);
+  //   }
+  // };
 
-    const functionArgs = [uintCV(10)];
-
-    try {
-      const result = await callReadOnlyFunction({
-        network,
-        contractAddress,
-        contractName,
-        functionName,
-        functionArgs,
-        senderAddress
-      });
-      setHasFetchedReadOnly(true);
-      console.log(cvToValue(result));
-    } catch (error) {
-      console.error('Error fetching read-only function:', error);
-    }
-  };
-
-  const signMessage = () => {
-    if (userSession.isUserSignedIn()) {
-      openSignatureRequestPopup({
-        message,
-        network,
-        onFinish: async ({ publicKey, signature }) => {
-          // Verify the message signature using the verifyMessageSignatureRsv function
-          const verified = verifyMessageSignatureRsv({
-            message,
-            publicKey,
-            signature
-          });
-          if (verified) {
-            // The signature is verified, so now we can check if the user is a keyholder
-            setIsSignatureVerified(true);
-            console.log(
-              'Address derived from public key',
-              getAddressFromPublicKey(publicKey, network.version)
-            );
-          }
-        }
-      });
-    }
-  };
+  // const signMessage = () => {
+  //   if (userSession.isUserSignedIn()) {
+  //     openSignatureRequestPopup({
+  //       message,
+  //       network,
+  //       onFinish: async ({ publicKey, signature }) => {
+  //         // Verify the message signature using the verifyMessageSignatureRsv function
+  //         const verified = verifyMessageSignatureRsv({
+  //           message,
+  //           publicKey,
+  //           signature
+  //         });
+  //         if (verified) {
+  //           // The signature is verified, so now we can check if the user is a keyholder
+  //           setIsSignatureVerified(true);
+  //           console.log(
+  //             'Address derived from public key',
+  //             getAddressFromPublicKey(publicKey, network.version)
+  //           );
+  //         }
+  //       }
+  //     });
+  //   }
+  // };
 
   return (
     <div className="mt-4 flex flex-col items-center space-y-2">

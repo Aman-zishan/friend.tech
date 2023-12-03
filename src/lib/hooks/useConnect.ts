@@ -19,6 +19,7 @@ import { atomWithStorage } from 'jotai/utils';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchSTXBalance } from '../utils';
+import { useAccount, useAuth } from '@micro-stacks/react';
 
 const initialValue = {
   email: '',
@@ -50,9 +51,12 @@ function useConnect() {
   const [user, setUser] = useAtom(userWalletAtom);
   const [balance, setBalance] = useState(0);
 
+  const { openAuthRequest, isRequestPending, signOut, isSignedIn } = useAuth();
+  const { stxAddress } = useAccount();
+
   const senderAddress = userSession.loadUserData().profile.stxAddress.testnet;
   const contractAddress = 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM';
-  const contractName = 'cooperative-orange-gamefowl';
+  const contractName = 'keys';
   const functionName = 'is-keyholder';
 
   async function checkIsKeyHolder(principal: string) {
@@ -75,7 +79,7 @@ function useConnect() {
   }
 
   async function handleInitialLogin() {
-    if (userSession.isUserSignedIn()) {
+    if (isSignedIn) {
       await openSignatureRequestPopup({
         message,
         network,
@@ -105,40 +109,10 @@ function useConnect() {
     }
   }
 
-  const authOptions = {
-    userSession,
-    appDetails: {
-      name: 'My App',
-      icon: 'src/favicon.svg'
-    },
-    onFinish: async (data: FinishedAuthData) => {
-      // Handle successful authentication here
-      const userData = data.userSession.loadUserData();
-      console.log(userData);
-      setUser(userData); // or .testnet for testnet
-      const fetchedSTXBalance = await fetchSTXBalance(
-        userData.profile.stxAddress.testnet
-      )
-        .then((data) => {
-          console.log(data);
-          setBalance(data.balance / 1000000);
-          handleInitialLogin();
-        })
-        .catch((error) => console.error(error));
-      console.log('BALANCE', fetchedSTXBalance);
-    },
-    onCancel: () => {
-      // Handle authentication cancellation here
-    }
-  };
-
   const fetchBalance = async () => {
-    if (userSession.isUserSignedIn()) {
-      const userData = userSession.loadUserData();
+    if (isSignedIn) {
       try {
-        const fetchedSTXBalance = await fetchSTXBalance(
-          userData.profile.stxAddress.testnet
-        );
+        const fetchedSTXBalance = await fetchSTXBalance(stxAddress!);
         setBalance(fetchedSTXBalance.balance / 1000000);
         console.log('Fetched balance:', fetchedSTXBalance);
       } catch (error) {
@@ -151,15 +125,15 @@ function useConnect() {
     fetchBalance();
   }, []); // The empty array causes this effect to only run on mount
 
-  const connectWallet = () => {
-    showConnect(authOptions);
+  const connectWallet = async () => {
+    await openAuthRequest().then(async (authResponse: any) => {
+      console.log('Auth response:', authResponse);
+      await handleInitialLogin();
+    });
   };
 
-  const disconnectWallet = () => {
-    if (userSession.isUserSignedIn()) {
-      userSession.signUserOut('/home');
-      setUser(initialValue);
-    }
+  const disconnectWallet = async () => {
+    await signOut();
   };
 
   return {
