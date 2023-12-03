@@ -116,6 +116,7 @@
   (asserts! (or (> supply u0) (is-eq tx-sender subject)) err-first-buy)
   (asserts! (> (stx-get-balance tx-sender) (+ price protocolFee subjectFee)) err-insufficient-payment)
   ;; Retain base amount in contract itself
+  (print {supply: supply, price:price, protocolFee:protocolFee, subjectFee:subjectFee})
   (try! (stx-transfer? price tx-sender (as-contract tx-sender)))
   ;; Send protocol fee to protocol contract
   (try! (stx-transfer? protocolFee tx-sender (var-get protocolFeeDestination)))
@@ -184,14 +185,29 @@
 
 ;; read only functions
 ;;
+;; (define-read-only (get-price (supply uint) (amount uint))
+;;   (let
+;;     (
+;;       (base-price u10)
+;;       (price-change-factor u100)
+;;       (adjusted-supply (+ supply amount))
+;;     )
+;;     (+ base-price (* amount (/ (* adjusted-supply adjusted-supply) price-change-factor)))
+;;   )
+;; )
 (define-read-only (get-price (supply uint) (amount uint))
-  (let
+  (let 
     (
-      (base-price u10)
-      (price-change-factor u100)
-      (adjusted-supply (+ supply amount))
+      (sum1 (if (is-eq supply u0)
+                u0
+                (/ (* (* (- supply u1) supply) (+ (* u2 (- supply u1)) u1)) u6)))
+      (sum2 (if (and (is-eq supply u0) (is-eq amount u1))
+                u0
+                (/ (* (* (+ (- supply u1) amount) (+ supply amount)) (+ (* u2 (+ (- supply u1) amount )) u1)) u6)))
+      (summation (- sum2 sum1))
     )
-    (+ base-price (* amount (/ (* adjusted-supply adjusted-supply) price-change-factor)))
+    (/ (* summation u1000000000000000000) u16000) ;; equivalent to 'summation * 1 ether / 16000' in Solidity
+ 
   )
 )
 
@@ -251,6 +267,23 @@
     )
     (- price protocolFee subjectFee)
   )
+)
+
+;; helper functions
+(define-read-only (get-owner)
+  (ok contract-owner)
+)
+
+(define-read-only (get-protocol-fee-destination)
+  (ok (var-get protocolFeeDestination))
+)
+
+(define-read-only (get-protocol-fee-percent)
+  (ok (var-get protocolFeePercent))
+)
+
+(define-read-only (get-subject-fee-percent)
+  (ok (var-get subjectFeePercent))
 )
 
 ;; private functions
