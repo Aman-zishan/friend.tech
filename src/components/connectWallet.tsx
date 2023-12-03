@@ -17,12 +17,14 @@ import { verifyMessageSignatureRsv } from '@stacks/encryption';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ExternalLink } from './external-link';
+import { ExternalLink } from '../external-link';
 import { ArrowRight } from 'lucide-react';
-import { truncateAddress } from './lib/utils';
+import { truncateAddress, fetchSTXBalance } from '../lib/utils';
+import { SVGComponent } from './stacksSvg';
 
-function App(): ReactElement {
+function ConnectWallet(): ReactElement {
   const [address, setAddress] = useState('');
+  const [balance, setBalance] = useState(0);
   const [isSignatureVerified, setIsSignatureVerified] = useState(false);
   const [hasFetchedReadOnly, setHasFetchedReadOnly] = useState(false);
 
@@ -40,11 +42,20 @@ function App(): ReactElement {
       name: 'My App',
       icon: 'src/favicon.svg'
     },
-    onFinish: (data: FinishedAuthData) => {
+    onFinish: async (data: FinishedAuthData) => {
       // Handle successful authentication here
       const userData = data.userSession.loadUserData();
       console.log(userData);
       setAddress(userData.profile.stxAddress.testnet); // or .testnet for testnet
+      const fetchedSTXBalance = await fetchSTXBalance(
+        userData.profile.stxAddress.testnet
+      )
+        .then((data) => {
+          console.log(data);
+          setBalance(data.balance / 1000000);
+        })
+        .catch((error) => console.error(error));
+      console.log('BALANCE', fetchedSTXBalance);
     },
     onCancel: () => {
       // Handle authentication cancellation here
@@ -58,7 +69,7 @@ function App(): ReactElement {
 
   const disconnectWallet = () => {
     if (userSession.isUserSignedIn()) {
-      userSession.signUserOut('/');
+      userSession.signUserOut('/home');
       setAddress('');
     }
   };
@@ -113,85 +124,37 @@ function App(): ReactElement {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="mx-auto max-w-2xl px-4">
-        <div className="rounded-lg border bg-background p-8">
-          <h1 className="mb-2 text-lg font-semibold">Welcome to Hiro Hacks!</h1>
-          <p className="leading-normal text-muted-foreground">
-            This is an open source starter template built with{' '}
-            <ExternalLink href="https://docs.hiro.so/stacks.js/overview">
-              Stacks.js
-            </ExternalLink>{' '}
-            and a few integrations to help kickstart your app:
-          </p>
-
-          <div className="mt-4 flex flex-col items-start space-y-2">
-            {userSession.isUserSignedIn() ? (
-              <div className="flex justify-between w-full">
-                <Button
-                  onClick={disconnectWallet}
-                  variant="link"
-                  className="h-auto p-0 text-base"
-                >
-                  1. Disconnect wallet
-                  <ArrowRight size={15} className="ml-1" />
-                </Button>
-                {address && <span>{truncateAddress(address)}</span>}
-              </div>
-            ) : (
-              <Button
-                onClick={connectWallet}
-                variant="link"
-                className="h-auto p-0 text-base"
-              >
-                1. Connect your wallet
-                <ArrowRight size={15} className="ml-1" />
-              </Button>
-            )}
-            <div className="flex justify-between w-full">
-              <Button
-                onClick={signMessage}
-                variant="link"
-                className="h-auto p-0 text-base text-neutral-500"
-              >
-                2. Sign a message
-                <ArrowRight size={15} className="ml-1" />
-              </Button>
-              {isSignatureVerified && <span>{message}</span>}
-            </div>
-
-            {userSession.isUserSignedIn() ? (
-              <div className="flex justify-between w-full">
-                <Button
-                  onClick={() => fetchReadOnly(address)}
-                  variant="link"
-                  className="h-auto p-0 text-base"
-                >
-                  3. Read from a smart contract
-                  <ArrowRight size={15} className="ml-1" />
-                </Button>
-                {hasFetchedReadOnly && (
-                  <span>
-                    <Badge className="text-orange-500 bg-orange-100">
-                      Success
-                    </Badge>
-                  </span>
-                )}
-              </div>
-            ) : (
-              <div className="flex justify-between w-full">
-                <Button
-                  variant="link"
-                  className="disabled h-auto p-0 text-base"
-                >
-                  3. Read from a smart contract
-                  <ArrowRight size={15} className="ml-1" />
-                </Button>
-              </div>
+    <div className="mt-4 flex flex-col items-center space-y-2">
+      {userSession.isUserSignedIn() ? (
+        <>
+          <div>
+            {balance && (
+              <span className="flex flex-row items-center gap-2 font-bold">
+                Balance: {balance} <SVGComponent />
+              </span>
             )}
           </div>
-        </div>
-      </div>
+          <div className="flex flex justify-center w-full">
+            <Button
+              onClick={disconnectWallet}
+              variant="link"
+              className="h-auto p-0 text-base"
+            >
+              logout
+              <ArrowRight size={15} className="ml-1" />
+            </Button>
+          </div>
+        </>
+      ) : (
+        <Button
+          onClick={connectWallet}
+          variant="link"
+          className="h-auto p-0 text-base"
+        >
+          Connect your wallet
+          <ArrowRight size={15} className="ml-1" />
+        </Button>
+      )}
     </div>
   );
 
@@ -227,4 +190,4 @@ function App(): ReactElement {
   // );
 }
 
-export default App;
+export default ConnectWallet;

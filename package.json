@@ -22,6 +22,7 @@
     "@stacks/transactions": "^6.9.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "jotai": "^2.6.0",
     "lucide-react": "^0.294.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
