@@ -21,58 +21,23 @@ import { ExternalLink } from '../external-link';
 import { ArrowRight } from 'lucide-react';
 import { truncateAddress, fetchSTXBalance } from '../lib/utils';
 import { SVGComponent } from './stacksSvg';
+import useConnect from '@/lib/hooks/useConnect';
 
 function ConnectWallet(): ReactElement {
+  const {
+    user,
+    connectWallet,
+    disconnectWallet,
+    network,
+    userSession,
+    balance
+  } = useConnect();
   const [address, setAddress] = useState('');
-  const [balance, setBalance] = useState(0);
+
   const [isSignatureVerified, setIsSignatureVerified] = useState(false);
   const [hasFetchedReadOnly, setHasFetchedReadOnly] = useState(false);
 
-  // Initialize your app configuration and user session here
-  const appConfig = new AppConfig(['store_write', 'publish_data']);
-  const userSession = new UserSession({ appConfig });
-
   const message = 'Hello, Hiro Hacks!';
-  const network = new StacksTestnet();
-
-  // Define your authentication options here
-  const authOptions = {
-    userSession,
-    appDetails: {
-      name: 'My App',
-      icon: 'src/favicon.svg'
-    },
-    onFinish: async (data: FinishedAuthData) => {
-      // Handle successful authentication here
-      const userData = data.userSession.loadUserData();
-      console.log(userData);
-      setAddress(userData.profile.stxAddress.testnet); // or .testnet for testnet
-      const fetchedSTXBalance = await fetchSTXBalance(
-        userData.profile.stxAddress.testnet
-      )
-        .then((data) => {
-          console.log(data);
-          setBalance(data.balance / 1000000);
-        })
-        .catch((error) => console.error(error));
-      console.log('BALANCE', fetchedSTXBalance);
-    },
-    onCancel: () => {
-      // Handle authentication cancellation here
-    },
-    redirectTo: '/'
-  };
-
-  const connectWallet = () => {
-    showConnect(authOptions);
-  };
-
-  const disconnectWallet = () => {
-    if (userSession.isUserSignedIn()) {
-      userSession.signUserOut('/home');
-      setAddress('');
-    }
-  };
 
   const fetchReadOnly = async (senderAddress: string) => {
     // Define your contract details here

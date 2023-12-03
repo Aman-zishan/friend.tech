@@ -146,6 +146,17 @@ describe('Core trade functionality', () => {
   });
 
   it('buy & sell flow', () => {
+    const getKeyHolderResponse = simnet.callReadOnlyFn(
+      'keys',
+      'is-keyholder',
+      [Cl.standardPrincipal(subject1), Cl.standardPrincipal(subject1)],
+      subject1
+    );
+
+    console.log(Cl.prettyPrint(getKeyHolderResponse.result));
+    //@ts-ignore
+    expect(getKeyHolderResponse.result).toBeBool(false);
+
     const setProtocolFeeDestination = simnet.callPublicFn(
       'keys',
       'set-protocol-fee-destination',
@@ -175,6 +186,17 @@ describe('Core trade functionality', () => {
 
     //@ts-ignore
     expect(getSupplyResponse.result).toBeUint(1);
+
+    const getKeyHolderCheckResponse = simnet.callReadOnlyFn(
+      'keys',
+      'is-keyholder',
+      [Cl.standardPrincipal(subject1), Cl.standardPrincipal(subject1)],
+      subject1
+    );
+
+    console.log(Cl.prettyPrint(getKeyHolderCheckResponse.result));
+    //@ts-ignore
+    expect(getKeyHolderCheckResponse.result).toBeBool(true);
 
     const buySubjectTwoShareResponse = simnet.callPublicFn(
       'keys',

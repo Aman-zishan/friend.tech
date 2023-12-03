@@ -1,6 +1,5 @@
 import ConnectWallet from '@/components/connectWallet';
 import LeftMenu from '@/components/leftMenu';
-import React from 'react';
 
 const Home = () => {
   return (
