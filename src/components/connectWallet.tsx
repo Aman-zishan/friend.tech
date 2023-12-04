@@ -1,28 +1,10 @@
-import React, { ReactElement, useState } from 'react';
-import { StacksMainnet, StacksDevnet, StacksTestnet } from '@stacks/network';
-import {
-  callReadOnlyFunction,
-  getAddressFromPublicKey,
-  uintCV,
-  cvToValue
-} from '@stacks/transactions';
-import {
-  AppConfig,
-  FinishedAuthData,
-  showConnect,
-  UserSession,
-  openSignatureRequestPopup
-} from '@stacks/connect';
-import { verifyMessageSignatureRsv } from '@stacks/encryption';
+import { ReactElement } from 'react';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ExternalLink } from '../external-link';
-import { ArrowRight } from 'lucide-react';
-import { truncateAddress, fetchSTXBalance } from '../lib/utils';
-import { SVGComponent } from './stacksSvg';
 import useConnect from '@/lib/hooks/useConnect';
-import { useAuth } from '@micro-stacks/react';
+import { ArrowRight } from 'lucide-react';
+import { SVGComponent } from './stacksSvg';
+import { useNavigate } from 'react-router-dom';
 
 function ConnectWallet(): ReactElement {
   const {
@@ -30,9 +12,10 @@ function ConnectWallet(): ReactElement {
     connectWallet,
     disconnectWallet,
     network,
-    userSession,
+    isSignedIn,
     balance
   } = useConnect();
+  const navigate = useNavigate();
 
   // const fetchReadOnly = async (senderAddress: string) => {
   //   // Define your contract details here
@@ -85,7 +68,7 @@ function ConnectWallet(): ReactElement {
 
   return (
     <div className="mt-4 flex flex-col items-center space-y-2">
-      {userSession.isUserSignedIn() ? (
+      {isSignedIn ? (
         <>
           <div>
             {balance && (
@@ -96,7 +79,10 @@ function ConnectWallet(): ReactElement {
           </div>
           <div className="flex flex justify-center w-full">
             <Button
-              onClick={disconnectWallet}
+              onClick={() => {
+                disconnectWallet;
+                navigate('/login');
+              }}
               variant="link"
               className="h-auto p-0 text-base"
             >

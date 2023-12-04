@@ -1,24 +1,30 @@
 import useConnect from '@/lib/hooks/useConnect';
 import { useOpenContractCall } from '@micro-stacks/react';
+import { createClient } from '@supabase/supabase-js';
 import { standardPrincipalCV, uintCV } from 'micro-stacks/clarity';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 const BuyFirstKey: React.FC = () => {
   const navigate = useNavigate();
-  const { userSession, contractAddress, contractName } = useConnect();
+
+  // Create a single supabase client for interacting with your database
+
+  const { contractAddress, contractName, stxAddress, isSignedIn, supabase } =
+    useConnect();
   const { openContractCall, isRequestPending } = useOpenContractCall();
 
   const [response, setResponse] = useState(null);
 
-  const functionArgs = [
-    standardPrincipalCV(
-      userSession?.loadUserData().profile?.stxAddress.testnet
-    ),
-    uintCV(1)
-  ];
-
+  const saveSubjectToDB = async () => {
+    const { error } = await supabase
+      .from('subjects')
+      .insert({ roomId: stxAddress });
+  };
   const handleOpenContractCall = async () => {
+    if (!isSignedIn) return;
+    const functionArgs = [standardPrincipalCV(stxAddress!), uintCV(1)];
     await openContractCall({
       contractAddress: contractAddress,
       contractName: contractName,
@@ -29,6 +35,7 @@ const BuyFirstKey: React.FC = () => {
       onFinish: async (data: any) => {
         console.log('finished contract call!', data);
         setResponse(data);
+
         navigate('/home');
       },
       onCancel: () => {
@@ -62,8 +69,9 @@ const BuyFirstKey: React.FC = () => {
           free!
         </p>
         <button
-          onClick={() => {
-            if (userSession?.isUserSignedIn()) {
+          onClick={async () => {
+            if (isSignedIn) {
+              saveSubjectToDB();
               handleOpenContractCall();
             }
           }}

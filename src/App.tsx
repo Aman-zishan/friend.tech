@@ -1,25 +1,21 @@
-import React, { ReactElement, useState } from 'react';
-import { StacksMainnet, StacksDevnet, StacksTestnet } from '@stacks/network';
-import {
-  callReadOnlyFunction,
-  getAddressFromPublicKey,
-  uintCV,
-  cvToValue
-} from '@stacks/transactions';
 import {
   AppConfig,
   FinishedAuthData,
-  showConnect,
   UserSession,
-  openSignatureRequestPopup
+  openSignatureRequestPopup,
+  showConnect
 } from '@stacks/connect';
 import { verifyMessageSignatureRsv } from '@stacks/encryption';
+import { StacksTestnet } from '@stacks/network';
+import {
+  callReadOnlyFunction,
+  cvToValue,
+  getAddressFromPublicKey,
+  uintCV
+} from '@stacks/transactions';
+import { ReactElement, useState } from 'react';
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { ExternalLink } from './external-link';
-import { ArrowRight } from 'lucide-react';
-import { truncateAddress } from './lib/utils';
+import LoginPage from './pages/Login';
 
 function App(): ReactElement {
   const [address, setAddress] = useState('');
@@ -112,88 +108,7 @@ function App(): ReactElement {
     }
   };
 
-  return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="mx-auto max-w-2xl px-4">
-        <div className="rounded-lg border bg-background p-8">
-          <h1 className="mb-2 text-lg font-semibold">Welcome to Hiro Hacks!</h1>
-          <p className="leading-normal text-muted-foreground">
-            This is an open source starter template built with{' '}
-            <ExternalLink href="https://docs.hiro.so/stacks.js/overview">
-              Stacks.js
-            </ExternalLink>{' '}
-            and a few integrations to help kickstart your app:
-          </p>
-
-          <div className="mt-4 flex flex-col items-start space-y-2">
-            {userSession.isUserSignedIn() ? (
-              <div className="flex justify-between w-full">
-                <Button
-                  onClick={disconnectWallet}
-                  variant="link"
-                  className="h-auto p-0 text-base"
-                >
-                  1. Disconnect wallet
-                  <ArrowRight size={15} className="ml-1" />
-                </Button>
-                {address && <span>{truncateAddress(address)}</span>}
-              </div>
-            ) : (
-              <Button
-                onClick={connectWallet}
-                variant="link"
-                className="h-auto p-0 text-base"
-              >
-                1. Connect your wallet
-                <ArrowRight size={15} className="ml-1" />
-              </Button>
-            )}
-            <div className="flex justify-between w-full">
-              <Button
-                onClick={signMessage}
-                variant="link"
-                className="h-auto p-0 text-base text-neutral-500"
-              >
-                2. Sign a message
-                <ArrowRight size={15} className="ml-1" />
-              </Button>
-              {isSignatureVerified && <span>{message}</span>}
-            </div>
-
-            {userSession.isUserSignedIn() ? (
-              <div className="flex justify-between w-full">
-                <Button
-                  onClick={() => fetchReadOnly(address)}
-                  variant="link"
-                  className="h-auto p-0 text-base"
-                >
-                  3. Read from a smart contract
-                  <ArrowRight size={15} className="ml-1" />
-                </Button>
-                {hasFetchedReadOnly && (
-                  <span>
-                    <Badge className="text-orange-500 bg-orange-100">
-                      Success
-                    </Badge>
-                  </span>
-                )}
-              </div>
-            ) : (
-              <div className="flex justify-between w-full">
-                <Button
-                  variant="link"
-                  className="disabled h-auto p-0 text-base"
-                >
-                  3. Read from a smart contract
-                  <ArrowRight size={15} className="ml-1" />
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  return <LoginPage />;
 
   // return (
   //   <div className="text-center">

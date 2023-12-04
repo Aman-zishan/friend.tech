@@ -13,6 +13,7 @@ import Login from './pages/Login';
 import BuyFirstKey from './pages/BuyFirstKey';
 import { StacksMocknet } from 'micro-stacks/network';
 import ChatRoom from './pages/ChatRoom';
+import ChatRoomUI from './pages/ChatRoomUI';
 
 const devnet = new StacksMocknet({ coreApiUrl: 'http://localhost:3999' });
 
@@ -30,8 +31,8 @@ createRoot(document.getElementById('root') as HTMLElement).render(
           <Route path="/buy-first-key" element={<BuyFirstKey />} />
           <Route path="/home" element={<Home />} />
           <Route path="/chats" element={<Chats />} />
-          <Route path="/chatRoom" element={<ChatRoom />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/chatRoom" element={<ChatRoomUI />} />
+          <Route path="/profile/:slug" element={<Profile />} />
           <Route path="/explore" element={<Explore />} />
         </Routes>
       </BrowserRouter>

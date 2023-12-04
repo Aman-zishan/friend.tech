@@ -1,11 +1,14 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import { SVGComponent } from './stacksSvg';
 import ConnectWallet from './connectWallet';
+import useConnect from '@/lib/hooks/useConnect';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 const LeftMenu = () => {
+  const { stxAddress } = useConnect();
+  const { slug } = useParams();
   const getNavLinkClass = ({ isActive }: any) => {
     return isActive
       ? 'flex items-center gap-5 bg-blue-500 rounded-xl font-bold text-md text-white py-3 px-4'
@@ -23,27 +26,30 @@ const LeftMenu = () => {
           </div>
           <div className="p-4">
             <ul className="space-y-5">
-              <li>
+              {/* <li>
                 <NavLink to={'/home'} className={getNavLinkClass}>
-                  <img src="assets/home.png" alt="" width={50} />
+                  <img src="../assets/home.png" alt="" width={50} />
                   Home
                 </NavLink>
-              </li>
+              </li> */}
               <li>
                 <NavLink to={'/chats'} className={getNavLinkClass}>
-                  <img src="assets/chats.png" alt="" width={50} />
+                  <img src="../assets/chats.png" alt="" width={50} />
                   Chats
                 </NavLink>
               </li>
               <li>
                 <NavLink to={'/explore'} className={getNavLinkClass}>
-                  <img src="assets/search.png" alt="" width={50} />
+                  <img src="../assets/search.png" alt="" width={50} />
                   Explore
                 </NavLink>
               </li>
               <li>
-                <NavLink to={'/profile'} className={getNavLinkClass}>
-                  <img src="assets/profile.png" alt="" width={50} />
+                <NavLink
+                  to={`/profile/${stxAddress}`}
+                  className={getNavLinkClass}
+                >
+                  <img src="../assets/profile.png" alt="" width={50} />
                   Profile
                 </NavLink>
               </li>
