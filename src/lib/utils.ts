@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export async function fetchSTXBalance(principal: string): Promise<any> {
   console.log('principal', principal);
-  const url = `https://api.testnet.hiro.so/extended/v1/address/${principal}/stx`;
+  const url = `http://localhost:3999/extended/v1/address/${principal}/stx`;
 
   try {
     const response = await fetch(url, {
