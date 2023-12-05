@@ -14,7 +14,7 @@ To get the application running, follow these steps:
 
 1. Clone the repository: `git clone https://github.com/Aman-zishan/friend.tech.git`
 2. Navigate into the directory: `cd friend.tech`
-3. create and .env file with the following content
+3. setup supabase client secret : create a .env file with the following content (development credentials).You could also create a fresh project with table `subjects` and column as `roomId` in supabase
 
 ```
 VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rbGRucXFiaGlibmN2dnh2Y2ZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE2ODc2NjIsImV4cCI6MjAxNzI2MzY2Mn0.H7LiOJFQT4jhCjmdhkVs3M5jLxjQQENhX30kiVKrMZ0
