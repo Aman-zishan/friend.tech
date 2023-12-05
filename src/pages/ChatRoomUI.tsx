@@ -1,22 +1,11 @@
 import ChatLeftMenu from '@/components/chatLeftMenu';
 
-import React, { useState, useEffect, useRef } from 'react';
 import queryString from 'query-string';
-import ScrollToBottom from 'react-scroll-to-bottom';
-import { io, Socket } from 'socket.io-client';
+import React, { useEffect, useRef, useState } from 'react';
+import { Socket, io } from 'socket.io-client';
 
-import Messages from '@/components/ui/Messages/Messages';
-import TextContainer from '@/components/ui/TextContainer/TextContainer';
 import Message from '@/components/ui/Messages/Message/Message';
-
-// If using React Router, you can import the type for location
-// import { Location } from 'react-router-dom';
-
-interface ChatRoomProps {
-  location: {
-    search: string;
-  };
-}
+import { truncateAddress } from '@/lib/utils';
 
 interface IMessage {
   user: string;
@@ -74,13 +63,15 @@ const ChatRoomUI = () => {
 
       <main className="ml-40  max-h-screen overflow-auto w-screen">
         <div>
-          <div className="max-w-4xl mx-auto">
-            <div className="p:2 sm:p-6 justify-end flex flex-col h-screen">
+          <div className="max-w-5xl mx-auto">
+            <div className="p:2 sm:p-6 justify-between flex flex-col h-screen">
               <div className="flex sm:items-center justify-between py-3 border-b-2 border-gray-200">
                 <div className=" flex items-center space-x-4">
                   <div className="flex flex-col leading-tight">
                     <div className="text-2xl mt-1 flex items-center">
-                      <span className="text-gray-700 mr-3">{room}</span>
+                      <span className="text-gray-700 mr-3">
+                        {`${truncateAddress(room)}'s chat room`}
+                      </span>
                     </div>
                     <span className="text-lg text-gray-600">
                       {users.length > 1

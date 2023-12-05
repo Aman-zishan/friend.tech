@@ -1,8 +1,9 @@
 
 ;; title: keys
 ;; version: 1.0.0
-;; summary: 
-;; description:
+;; summary: Core contract of sFriend.Tech. sFriend.tech is a clone application of friend.tech in stacks
+;; description: This contracts contains all the core functions of the key mechanism, the pricing model follows a quadratic formula 
+;; to calculate the price of a key based on supply trends.
 
 ;; traits
 ;;
@@ -94,6 +95,7 @@
   (asserts! (> (stx-get-balance tx-sender) (+ price protocolFee subjectFee)) err-insufficient-payment)
   ;; Retain base amount in contract itself
   (print {supply: supply, price:price, protocolFee:protocolFee, subjectFee:subjectFee, amount: amount})
+  ;; Allow a subject to buy his first key
   (if (> price u0)
       (begin
         ;; Retain base amount in contract itself
@@ -152,7 +154,7 @@
                 (/ (* (* (+ (- supply u1) amount) (+ supply amount)) (+ (* u2 (+ (- supply u1) amount )) u1)) u6)))
       (summation (- sum2 sum1))
     )
-    (/ (* summation u1000000) u16) ;; equivalent to 'summation * 1 ether / 16000' in Solidity
+    (/ (* summation u1000000) u16) 
  
   )
 )

@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
-import { SVGComponent } from './stacksSvg';
-import ConnectWallet from './connectWallet';
 import useConnect from '@/lib/hooks/useConnect';
 import { truncateAddress } from '@/lib/utils';
+import React, { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import ConnectWallet from './connectWallet';
+import { SVGComponent } from './stacksSvg';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
@@ -44,12 +44,51 @@ const ChatLeftMenu = () => {
     <aside className="fixed inset-y-0 left-0 bg-white shadow-md w-80 h-screen">
       <div className="flex flex-col justify-between h-full">
         <div className="flex-grow">
-          <div className="px-4 py-6 text-center border-b flex flex-row items-center justify-center gap-2">
-            <SVGComponent />
-            <h1 className="text-xl font-normal leading-none">
-              <span className="text-blue-500">sFriend</span>.tech
-            </h1>
-          </div>
+          <nav className="px-4 py-6 border-b">
+            <div className="flex justify-center items-center py-4">
+              <a href="/chats" className="absolute left-4">
+                <svg
+                  className="h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </a>
+
+              <div className="text-center flex flex-row items-center gap-2">
+                <SVGComponent />
+                <h1 className="text-xl font-normal leading-none">
+                  <span className="text-blue-500">sFriend</span>.tech
+                </h1>
+              </div>
+
+              <div className="absolute right-4 opacity-0">
+                <svg
+                  className="h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </div>
+            </div>
+          </nav>
+
           <div className="p-4">
             <ul className="space-y-5">
               {chatRooms.map((chatRoom: any) => {
@@ -57,36 +96,20 @@ const ChatLeftMenu = () => {
                   <>
                     {chatRoom.hasAccess && (
                       <div
-                        onClick={() =>
+                        onClick={() => {
                           navigate(
                             `/chatRoom?name=${truncateAddress(
                               stxAddress!
                             )}&room=${chatRoom.roomId}`
-                          )
-                        }
+                          );
+                          window.location.reload();
+                        }}
                         className="flex items-center justify-between border-b pb-5 mb-10"
                       >
-                        <div className="flex items-stretch">
-                          <div className="text-gray-400 text-xs">
-                            Members
-                            <br />
-                            connected
-                          </div>
-                          <div className="h-100 border-l mx-4"></div>
-                          <div className="flex flex-nowrap -space-x-3">
-                            <div className="h-9 w-9">
-                              <img
-                                className="object-cover w-full h-full rounded-full"
-                                src="https://ui-avatars.com/api/?background=random"
-                              />
-                            </div>
-                            <div className="h-9 w-9">
-                              <img
-                                className="object-cover w-full h-full rounded-full"
-                                src="https://ui-avatars.com/api/?background=random"
-                              />
-                            </div>
-                          </div>
+                        <div className="flex items-stretch font-bold">
+                          {stxAddress === chatRoom.roomId
+                            ? 'My chat room'
+                            : `${truncateAddress(chatRoom.roomId)}'s chat room`}
                         </div>
                         <div className="flex items-center gap-x-2">
                           <button

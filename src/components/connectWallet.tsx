@@ -7,14 +7,8 @@ import { SVGComponent } from './stacksSvg';
 import { useNavigate } from 'react-router-dom';
 
 function ConnectWallet(): ReactElement {
-  const {
-    user,
-    connectWallet,
-    disconnectWallet,
-    network,
-    isSignedIn,
-    balance
-  } = useConnect();
+  const { connectWallet, disconnectWallet, network, isSignedIn, balance } =
+    useConnect();
   const navigate = useNavigate();
 
   // const fetchReadOnly = async (senderAddress: string) => {

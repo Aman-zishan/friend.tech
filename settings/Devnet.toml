@@ -18,7 +18,7 @@ balance = 10_000_000_000
 
 [accounts.wallet_2]
 mnemonic = "hold excess usual excess ring elephant install account glad dry fragile donkey gaze humble truck breeze nation gasp vacuum limb head keep delay hospital"
-balance = 100_000_000_000_000
+balance = 10_000_000_000
 # secret_key: 530d9f61984c888536871c6573073bdfc0058896dc1adfe9a6a10dfacadc209101
 # stx_address: ST2CY5V39NHDPWSXMW9QDT3HC3GD6Q6XX4CFRK9AG
 # btc_address: muYdXKmX9bByAueDe6KFfHd5Ff1gdN9ErG

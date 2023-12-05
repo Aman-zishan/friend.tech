@@ -1,5 +1,4 @@
 import { useAccount, useAuth, useOpenSignMessage } from '@micro-stacks/react';
-import { UserData } from '@stacks/connect';
 import { StacksDevnet } from '@stacks/network';
 import {
   callReadOnlyFunction,
@@ -8,27 +7,9 @@ import {
   standardPrincipalCV
 } from '@stacks/transactions';
 import { createClient } from '@supabase/supabase-js';
-import { useAtom } from 'jotai';
-import { atomWithStorage } from 'jotai/utils';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchSTXBalance } from '../utils';
-
-const initialValue = {
-  email: '',
-  decentralizedID: '',
-  identityAddress: '',
-  appPrivateKey: '',
-  hubUrl: '',
-  coreNode: '',
-  authResponseToken: '',
-  coreSessionToken: '',
-  gaiaAssociationToken: '',
-  profile: '',
-  gaiaHubConfig: '',
-  appPrivateKeyFromWalletSalt: ''
-};
-const userWalletAtom = atomWithStorage<UserData>('userWallet', initialValue);
 
 const message = 'Check if i am a keyholder ;)';
 const network = new StacksDevnet();
@@ -37,7 +18,7 @@ const network = new StacksDevnet();
 
 function useConnect() {
   const navigate = useNavigate();
-  const [user, setUser] = useAtom(userWalletAtom);
+
   const [balance, setBalance] = useState(0);
   console.log(import.meta.env.VITE_SUPABASE_ANON_KEY);
   const supabase = createClient(
@@ -46,7 +27,7 @@ function useConnect() {
   );
 
   const { openAuthRequest, signOut, isSignedIn } = useAuth();
-  const { openSignMessage, isRequestPending } = useOpenSignMessage();
+  const { openSignMessage } = useOpenSignMessage();
   const { stxAddress } = useAccount();
 
   const senderAddress = stxAddress!;
@@ -154,7 +135,6 @@ function useConnect() {
   return {
     connectWallet,
     disconnectWallet,
-    user,
     balance,
     network,
     contractAddress,

@@ -57,27 +57,12 @@ const Chats = () => {
                             }
                             className="flex items-center justify-between border-b pb-5 mb-10"
                           >
-                            <div className="flex items-stretch">
-                              <div className="text-gray-400 text-xs">
-                                Members
-                                <br />
-                                connected
-                              </div>
-                              <div className="h-100 border-l mx-4"></div>
-                              <div className="flex flex-nowrap -space-x-3">
-                                <div className="h-9 w-9">
-                                  <img
-                                    className="object-cover w-full h-full rounded-full"
-                                    src="https://ui-avatars.com/api/?background=random"
-                                  />
-                                </div>
-                                <div className="h-9 w-9">
-                                  <img
-                                    className="object-cover w-full h-full rounded-full"
-                                    src="https://ui-avatars.com/api/?background=random"
-                                  />
-                                </div>
-                              </div>
+                            <div className="text-lg font-bold">
+                              {stxAddress === chatRoom.roomId
+                                ? 'My chat room'
+                                : `${truncateAddress(
+                                    chatRoom.roomId
+                                  )}'s chat room`}
                             </div>
                             <div className="flex items-center gap-x-2">
                               <button

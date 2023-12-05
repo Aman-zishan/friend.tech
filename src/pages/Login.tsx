@@ -1,9 +1,5 @@
 import { SVGComponent } from '@/components/stacksSvg';
 import useConnect from '@/lib/hooks/useConnect';
-import {
-  callReadOnlyFunction,
-  standardPrincipalCV
-} from '@stacks/transactions';
 import React from 'react';
 
 const LoginPage: React.FC = () => {

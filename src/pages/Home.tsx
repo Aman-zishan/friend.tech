@@ -1,4 +1,3 @@
-import ConnectWallet from '@/components/connectWallet';
 import LeftMenu from '@/components/leftMenu';
 
 const Home = () => {

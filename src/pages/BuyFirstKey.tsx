@@ -1,10 +1,8 @@
 import useConnect from '@/lib/hooks/useConnect';
 import { useOpenContractCall } from '@micro-stacks/react';
-import { createClient } from '@supabase/supabase-js';
 import { standardPrincipalCV, uintCV } from 'micro-stacks/clarity';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 
 const BuyFirstKey: React.FC = () => {
   const navigate = useNavigate();
@@ -36,7 +34,7 @@ const BuyFirstKey: React.FC = () => {
         console.log('finished contract call!', data);
         setResponse(data);
 
-        navigate('/home');
+        navigate(`/profile/${stxAddress}`);
       },
       onCancel: () => {
         console.log('popup closed!');

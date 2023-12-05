@@ -25,11 +25,13 @@ const Profile = () => {
     useConnect();
   const [inputAmount, setInputAmount] = useState('');
   const [shareBuyPrice, setShareBuyPrice] = useState(0);
+  const [keyBalance, setKeyBalance] = useState(0);
   const { openContractCall, isRequestPending } = useOpenContractCall();
 
   useEffect(() => {
     fetchSharePrice();
-  }, []);
+    fetchShareBalance();
+  }, [slug]);
 
   const fetchSharePrice = async () => {
     if (!isSignedIn) return;
@@ -47,6 +49,27 @@ const Profile = () => {
 
     console.log('Result:', cvToJSON(result));
     setShareBuyPrice(cvToJSON(result).value);
+  };
+
+  const fetchShareBalance = async () => {
+    if (!isSignedIn) return;
+    const functionName = 'get-keys-balance';
+    const functionArgs = [
+      standardPrincipalCV(slug as string),
+      standardPrincipalCV(stxAddress!)
+    ];
+    const network = new StacksDevnet();
+    const result = await callReadOnlyFunction({
+      network,
+      contractAddress,
+      contractName,
+      functionName,
+      functionArgs,
+      senderAddress: stxAddress as string
+    });
+
+    console.log('Result:', cvToJSON(result));
+    setKeyBalance(cvToJSON(result).value);
   };
 
   const fetchBuySharePriceByAmount = async (
@@ -165,7 +188,9 @@ const Profile = () => {
         <div className="px-6 py-8">
           <div className="max-w-4xl mx-auto">
             <div className="bg-white rounded-3xl p-8 mb-5">
-              <h1 className="text-3xl font-bold mb-10">Profile</h1>
+              <h1 className="text-3xl font-bold mb-10">
+                {truncateAddress(slug!)}
+              </h1>
               <div className="flex items-center justify-between">
                 <div className="flex items-stretch">
                   <div className="text-gray-400 text-xs">
@@ -227,13 +252,19 @@ const Profile = () => {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-x-2">
+                <div className="flex flex-col items-center gap-x-2 gap-y-2 w-[400px]">
                   <button
                     type="button"
-                    className="inline-flex items-center justify-center h-9 px-5 rounded-xl bg-gray-900 text-gray-300 hover:text-white text-sm font-semibold transition"
+                    className="w-[400px] inline-flex items-center justify-center h-9 px-5 rounded-xl bg-gray-900 text-gray-300 hover:text-white text-sm font-semibold transition"
                   >
                     buy price for 1 share: {shareBuyPrice / 1000000} STX (inc.
                     all Fees)
+                  </button>
+                  <button
+                    type="button"
+                    className="w-[400px] inline-flex items-center justify-center h-9 px-5 rounded-xl bg-gray-900 text-gray-300 hover:text-white text-sm font-semibold transition"
+                  >
+                    you are holding : {keyBalance} keys
                   </button>
                 </div>
               </div>
@@ -266,7 +297,7 @@ const Profile = () => {
                   </div>
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold mb-4">Trade</h2>
+                  <h2 className="text-2xl font-bold mb-4">Trade Keys</h2>
 
                   <form className="flex flex-col justify-between " action="">
                     <div className="mb-6">
@@ -274,7 +305,7 @@ const Profile = () => {
                         htmlFor="large-input"
                         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                       >
-                        Enter Amount of Shares
+                        Enter Amount
                       </label>
                       <input
                         type="text"
@@ -292,7 +323,7 @@ const Profile = () => {
                         }
                         className="inline-flex items-center justify-center h-9 px-[50px] rounded-xl bg-gray-900 text-gray-300 hover:text-white text-sm font-semibold transition"
                       >
-                        BUY SHARE
+                        BUY KEY
                       </button>
 
                       <button
@@ -302,7 +333,7 @@ const Profile = () => {
                         }
                         className="inline-flex items-center justify-center h-9 px-[50px] rounded-xl bg-gray-900 text-gray-300 hover:text-white text-sm font-semibold transition"
                       >
-                        SELL SHARE
+                        SELL KEY
                       </button>
                     </div>
                   </form>
