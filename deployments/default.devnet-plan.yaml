@@ -11,7 +11,7 @@ plan:
         - contract-publish:
             contract-name: keys
             expected-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            cost: 68850
+            cost: 71350
             path: contracts/keys.clar
             anchor-block-only: true
             clarity-version: 2
