@@ -46,15 +46,17 @@ To run the contract tests, simply run `yarn test` from the root directory. This 
    
 2.  set the protocol fee destination to the newly created account (only deployer can set the protocol fee destination) by calling `set-protocol-fee-destination` function from the deployed keys contract via stacks explorer sandbox
 
-3. Connect the deployer wallet to the application
-   
-4. The application will check if you have already bought the first key, if not then it will ask you to buy the first key (first key is free and allows the subject to create a profile)
-   
-5. Now you are redirected to the profile page, where you can trade keys
+stacks explorer sandbox contract link : http://localhost:8000/sandbox/contract-call/ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.keys?chain=testnet&api=http://localhost:3999
 
-6. Now connect the holder wallet to the application in another browser 
+4. Connect the deployer wallet to the application
+   
+5. The application will check if you have already bought the first key, if not then it will ask you to buy the first key (first key is free and allows the subject to create a profile)
+   
+6. Now you are redirected to the profile page, where you can trade keys
 
-7. repeat the process of buying the first key
+7. Now connect the holder wallet to the application in another browser 
+
+8. repeat the process of buying the first key
 
 
 
