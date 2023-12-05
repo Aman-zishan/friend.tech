@@ -14,12 +14,19 @@ To get the application running, follow these steps:
 
 1. Clone the repository: `git clone https://github.com/Aman-zishan/friend.tech.git`
 2. Navigate into the directory: `cd friend.tech`
-3. Install the dependencies: `yarn install`
-4. Start the frontend development server: `yarn dev`
-5. Open a new terminal session
-6. Install the dependencies for the chat server: `cd server && yarn install`
-7. Start the chat server: `yarn start`
-8. Open the application in your browser: `http://localhost:5173/`
+3. create and .env file with the following content
+
+```
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rbGRucXFiaGlibmN2dnh2Y2ZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE2ODc2NjIsImV4cCI6MjAxNzI2MzY2Mn0.H7LiOJFQT4jhCjmdhkVs3M5jLxjQQENhX30kiVKrMZ0
+VITE_SUPABASE_PROJECT_URL=https://nkldnqqbhibncvvxvcfk.supabase.co
+```
+
+4. Install the dependencies: `yarn install`
+5. Start the frontend development server: `yarn dev`
+6. Open a new terminal session
+7. Install the dependencies for the chat server: `cd server && yarn install`
+8. Start the chat server: `yarn start`
+9. Open the application in your browser: `http://localhost:5173/`
 
 
 ## Setup
